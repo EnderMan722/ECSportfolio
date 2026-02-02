@@ -1,5 +1,6 @@
 @charset "UTF-8"; 
 /*1D4D92, 92621D, 1D4D92, 674515, 1D4D92 */
+/*1E50F3, F3C11E, 1E50F3, D3A40B, 1E50F3 */
 /* This is a comment! Text here will be ignored by the browser. */
 body {
 	margin: 0 auto;
@@ -31,7 +32,7 @@ body {
 	text-align: center;
 }
 .content {
-	background: #1E50F3;
+	background: #1D4D92;
 	margin: 0px;
 	float: left;
 	width: 100%;
@@ -44,4 +45,13 @@ body {
 	width: 100%;
 	height: 50px;
 	text-align: center;
+}
+a:link {
+     color: #F3C11E;
+}
+a:visited {
+     color: #D3A40B;
+}
+a:hover, a:active, a:focus { 
+     text-decoration: underline;
 }

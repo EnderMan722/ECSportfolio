@@ -1,17 +1,18 @@
-@charset "UTF-8";
+@charset "UTF-8"; 
+/*1E50F3, F3C11E, 1E50F3, D3A40B, 1E50F3 */
 /* This is a comment! Text here will be ignored by the browser. */
 body {
 	margin: 0 auto;
 }
 .homePage {
-	background: #222222;
+	background: #1E50F3;
 }
 .container {
 	width: 960px;
 	margin: 0 auto;
 }
 .header {
-	background: #AAAAAA;
+	background: #F3C11E;
 	text-align: center;
 	margin: 0px;
 	padding: 5;
@@ -21,7 +22,7 @@ body {
 	
 }
 .nav {
-	background: #BBBBBB;
+	background: #F3C11E;
 	margin: 0px;
 	padding: 5;
 	float: left;
@@ -30,14 +31,14 @@ body {
 	text-align: center;
 }
 .content {
-	background: #EEEEEE;
+	background: #1E50F3;
 	margin: 0px;
 	float: left;
 	width: 100%;
 	text-align: center;
 }
 .footer {
-	background: #777777;
+	background: #1E50F3;
 	margin: 0px;
 	float: left;
 	width: 100%;

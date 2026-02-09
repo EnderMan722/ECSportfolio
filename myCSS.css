@@ -46,6 +46,8 @@ img {
 }
 p {
 	margin: 20px;
+	font-color: white;
+	font-style: cursive;
 }
 .footer {
 	background: #1D4D92;

@@ -43,6 +43,9 @@ img {
 	border-style: solid;
 	border-radius: 10px;
 }
+p {
+	margin: 20px;
+}
 .footer {
 	background: #1D4D92;
 	margin: 0px;

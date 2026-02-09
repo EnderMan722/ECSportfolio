@@ -37,6 +37,13 @@ body {
 	width: 100%;
 	text-align: left;
 }
+img {
+	width: 500px;
+	border-color: #F3C11E;
+	border-width: 4px;
+	border-style: solid;
+	border-radius: 10px;
+}
 .footer {
 	background: #1D4D92;
 	margin: 0px;

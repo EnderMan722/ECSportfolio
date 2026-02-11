@@ -32,7 +32,8 @@ body {
 }
 .content {
 	background: #1D4D92;
-	margin: 30px;
+	margin: 0px;
+	padding: 20px;
 	float: left;
 	width: 100%;
 	text-align: left;
@@ -45,13 +46,10 @@ img {
 	border-radius: 10px;
 }
 p {
-	margin: 20px;
+	margin: 5px;
 }
 h3 {
-	margin: 20px;
-}
-h4 {
-	margin: 20px;
+	margin: 5px;
 }
 .footer {
 	background: #1D4D92;

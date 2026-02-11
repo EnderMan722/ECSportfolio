@@ -37,6 +37,8 @@ body {
 	float: left;
 	width: 100%;
 	text-align: left;
+	font-color: white;
+	font-style: cursive;
 }
 img {
 	margin: 30px;

@@ -1,4 +1,4 @@
-// Ender Hale | Timer - Stopwatch | p5.js version
+// Ender Hale | Timer - Stopwatch | p5.js version (fixed)
 
 let screen = 't';
 
@@ -32,7 +32,7 @@ let lastMeowTime = 0;
 // buttons
 let btnStart, btnReset, btnPause, btnSwitchMode, btnSnooze;
 
-// simple button class
+// ---------------- BUTTON CLASS ----------------
 class Button {
   constructor(label, x, y, w, h) {
     this.label = label;
@@ -43,34 +43,61 @@ class Button {
   }
 
   display() {
+    if (this.isMouseOver()) {
+      fill(190);
+    } else {
+      fill(220);
+    }
+
+    stroke(0);
     rect(this.x, this.y, this.w, this.h);
+
+    fill(0);
     textAlign(CENTER, CENTER);
+    textSize(14);
     text(this.label, this.x + this.w / 2, this.y + this.h / 2);
   }
 
   clicked(mx, my) {
-    return mx > this.x && mx < this.x + this.w &&
-           my > this.y && my < this.y + this.h;
+    return (
+      mx > this.x &&
+      mx < this.x + this.w &&
+      my > this.y &&
+      my < this.y + this.h
+    );
+  }
+
+  isMouseOver() {
+    return (
+      mouseX > this.x &&
+      mouseX < this.x + this.w &&
+      mouseY > this.y &&
+      mouseY < this.y + this.h
+    );
   }
 }
 
+// ---------------- PRELOAD ----------------
 function preload() {
   alarm = loadSound("scream.mp3");
 }
 
+// ---------------- SETUP ----------------
 function setup() {
   createCanvas(1000, 500);
+  rectMode(CORNER);
 
-  btnStart = new Button("Start", 300, 400, 75, 40);
-  btnReset = new Button("Reset", 500, 400, 75, 40);
-  btnPause = new Button("Pause", 400, 400, 75, 40);
-  btnSwitchMode = new Button("Switch", 750, 200, 80, 40);
+  btnStart = new Button("Start", 300, 400, 80, 40);
+  btnReset = new Button("Reset", 500, 400, 80, 40);
+  btnPause = new Button("Pause", 400, 400, 80, 40);
+  btnSwitchMode = new Button("Switch", 750, 200, 100, 40);
   btnSnooze = new Button("Snooze", 650, 400, 100, 40);
 
   lastTime = millis();
   lastCountdownTime = millis();
 }
 
+// ---------------- DRAW ----------------
 function draw() {
   background(255);
 
@@ -78,7 +105,14 @@ function draw() {
   if (screen === 's') stopwatchScreen();
   if (screen === 'c') countdownScreen();
 
-  // stopwatch update
+  updateStopwatch();
+  updateCountdown();
+  handleAlarm();
+}
+
+// ---------------- UPDATES ----------------
+
+function updateStopwatch() {
   if (timeStart && screen === 's') {
     let current = millis();
     let delta = current - lastTime;
@@ -95,8 +129,9 @@ function draw() {
     stopwatchSecond = floor(remainder / 1000);
     stopwatchMilisecond = floor((remainder % 1000) / 10);
   }
+}
 
-  // countdown update
+function updateCountdown() {
   if (timeStart && screen === 'c') {
     let current = millis();
     let delta = current - lastCountdownTime;
@@ -123,8 +158,9 @@ function draw() {
       countdownSecond = floor(remainder / 1000);
     }
   }
+}
 
-  // alarm loop
+function handleAlarm() {
   if (alarmActive && !snoozePressed) {
     if (millis() - lastMeowTime >= 2000) {
       if (alarm.isLoaded()) alarm.play();
@@ -193,6 +229,7 @@ function countdownScreen() {
 // ---------------- INPUT ----------------
 
 function mousePressed() {
+
   if (btnStart.clicked(mouseX, mouseY)) {
     timeStart = true;
     paused = false;
@@ -222,6 +259,10 @@ function mousePressed() {
     timeStart = false;
 
     stopwatchElapsed = 0;
+    stopwatchHour = 0;
+    stopwatchMinute = 0;
+    stopwatchSecond = 0;
+    stopwatchMilisecond = 0;
 
     countdownElapsed = 0;
     inputDigits = "";

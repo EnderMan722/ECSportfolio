@@ -29,7 +29,7 @@ let mouseGame = new p5((p) => {
 
   // ===== SETUP =====
   p.setup = function () {
-    p.createCanvas(750, 750);
+    p.createCanvas(750, 750).parent("mouseGame");
 
     pos = p.createVector(p.width / 2, p.height / 2);
     catPos = p.createVector(p.width + 200, p.height / 2);
@@ -122,9 +122,7 @@ let mouseGame = new p5((p) => {
       waitingForMeow = true;
     }
 
-    if (p.key === 'r') {
-      resetGame();
-    }
+    if (p.key === 'r') resetGame();
   };
 
   function resetGame() {
@@ -138,7 +136,6 @@ let mouseGame = new p5((p) => {
     gameOver = false;
   }
 
-  // audio unlock
   p.mousePressed = function () {
     p.userStartAudio();
   };

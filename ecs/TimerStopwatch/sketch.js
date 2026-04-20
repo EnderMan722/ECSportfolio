@@ -37,18 +37,24 @@ let timerSketch = new p5((p) => {
       this.y = y;
       this.w = w;
       this.h = h;
+      this.buttonColor = 220;
     }
 
     display() {
-      if (this.isMouseOver()) p.fill(190);
-      else p.fill(220);
+      if (this.isMouseOver()) {
+        this.buttonColor = 190;
+      } else {
+        this.buttonColor = 220;
+      }
 
+      p.fill(this.buttonColor);
       p.stroke(0);
+
       p.rect(this.x, this.y, this.w, this.h);
 
       p.fill(0);
       p.textAlign(p.CENTER, p.CENTER);
-      p.textSize(14);
+      p.textSize(16);
       p.text(this.label, this.x + this.w / 2, this.y + this.h / 2);
     }
 
@@ -104,7 +110,7 @@ let timerSketch = new p5((p) => {
     handleAlarm();
   };
 
-  // ---------------- FUNCTIONS ----------------
+  // ---------------- UPDATES ----------------
 
   function updateStopwatch() {
     if (timeStart && screen === 's') {
@@ -215,6 +221,7 @@ let timerSketch = new p5((p) => {
   }
 
   // ---------------- INPUT ----------------
+
   p.mousePressed = function () {
 
     if (btnStart.clicked(p.mouseX, p.mouseY)) {
@@ -223,7 +230,7 @@ let timerSketch = new p5((p) => {
 
       if (screen === 'c') {
         if (!countdownInitialized) {
-          let value = int(inputDigits || 0);
+          let value = p.int(inputDigits || 0);
 
           let minutes = p.floor(value / 100);
           let seconds = value % 100;

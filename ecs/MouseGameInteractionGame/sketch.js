@@ -1,146 +1,146 @@
-let pos, target, catPos;
-let cheese, mouseImg, cat;
-let explosionGif;
+let mouseGame = new p5((p) => {
 
-let touching = false;
-let flyingCat = false;
-let exploded = false;
-let waitingForMeow = false;
-let gameOver = false;
+  let pos, target, catPos;
+  let cheese, mouseImg, cat;
+  let explosionGif;
 
-let chomp, meow, explosion;
+  let touching = false;
+  let flyingCat = false;
+  let exploded = false;
+  let waitingForMeow = false;
+  let gameOver = false;
 
-// explosion timing
-let explosionStartTime = 0;
-let explosionDuration = 2000; // adjust to match your gif
+  let chomp, meow, explosion;
 
-function preload() {
-  cheese = loadImage("cheese.png");
-  mouseImg = loadImage("mouse.png");
-  cat = loadImage("cat.png");
-  explosionGif = loadImage("explosion.gif");
+  let explosionStartTime = 0;
+  let explosionDuration = 2000;
 
-  chomp = loadSound("chomp.wav");
-  meow = loadSound("meow.mp3");
-  explosion = loadSound("explosion.mp3");
-}
+  // ===== PRELOAD =====
+  p.preload = function () {
+    cheese = p.loadImage("cheese.png");
+    mouseImg = p.loadImage("mouse.png");
+    cat = p.loadImage("cat.png");
+    explosionGif = p.loadImage("explosion.gif");
 
-function setup() {
-  createCanvas(750, 750);
+    chomp = p.loadSound("chomp.wav");
+    meow = p.loadSound("meow.mp3");
+    explosion = p.loadSound("explosion.mp3");
+  };
 
-  pos = createVector(width/2, height/2);
-  catPos = createVector(width + 200, height/2);
+  // ===== SETUP =====
+  p.setup = function () {
+    p.createCanvas(750, 750);
 
-  cheese.resize(75, 75);
-  mouseImg.resize(80, 80);
-  cat.resize(300, 300);
+    pos = p.createVector(p.width / 2, p.height / 2);
+    catPos = p.createVector(p.width + 200, p.height / 2);
 
-  imageMode(CENTER);
-  textAlign(CENTER, CENTER);
-}
+    cheese.resize(75, 75);
+    mouseImg.resize(80, 80);
+    cat.resize(300, 300);
 
-function draw() {
-  // ===== GAME OVER SCREEN =====
-  if (gameOver) {
-    background(0);
-    fill(255);
-    textSize(50);
-    text("GAME OVER", width/2, height/2);
-    textSize(20);
-    text("Press R to restart", width/2, height/2 + 50);
-    return;
-  }
+    p.imageMode(p.CENTER);
+    p.textAlign(p.CENTER, p.CENTER);
+  };
 
-  background(220);
+  // ===== DRAW =====
+  p.draw = function () {
 
-  // ===== WAIT FOR MEOW =====
-  if (waitingForMeow && !meow.isPlaying()) {
-    flyingCat = true;
-    waitingForMeow = false;
-  }
+    if (gameOver) {
+      p.background(0);
+      p.fill(255);
+      p.textSize(50);
+      p.text("GAME OVER", p.width / 2, p.height / 2);
+      p.textSize(20);
+      p.text("Press R to restart", p.width / 2, p.height / 2 + 50);
+      return;
+    }
 
-  // ===== MOUSE FOLLOW =====
-  target = createVector(mouseX, mouseY);
-  let direction = p5.Vector.sub(target, pos);
-  direction.mult(0.05);
-  pos.add(direction);
+    p.background(220);
 
-  let angle = direction.heading();
+    if (waitingForMeow && !meow.isPlaying()) {
+      flyingCat = true;
+      waitingForMeow = false;
+    }
 
-  image(cheese, mouseX, mouseY);
+    target = p.createVector(p.mouseX, p.mouseY);
+    let direction = p5.Vector.sub(target, pos);
+    direction.mult(0.05);
+    pos.add(direction);
 
-  push();
-  translate(pos.x, pos.y);
-  rotate(angle - radians(130));
-  image(mouseImg, 0, 0);
-  pop();
+    let angle = direction.heading();
 
-  let d = p5.Vector.dist(pos, target);
-  if (d <= 30 && !touching) {
-    if (!chomp.isPlaying()) chomp.play();
-    touching = true;
-  }
-  if (d > 30) touching = false;
+    p.image(cheese, p.mouseX, p.mouseY);
 
-  // ===== CAT MOVEMENT =====
-  if (flyingCat) {
-    let catDirection = p5.Vector.sub(target, catPos);
-    catDirection.mult(0.1);
-    catPos.add(catDirection);
+    p.push();
+    p.translate(pos.x, pos.y);
+    p.rotate(angle - p.radians(130));
+    p.image(mouseImg, 0, 0);
+    p.pop();
 
-    image(cat, catPos.x, catPos.y);
+    let d = p5.Vector.dist(pos, target);
+    if (d <= 30 && !touching) {
+      if (!chomp.isPlaying()) chomp.play();
+      touching = true;
+    }
+    if (d > 30) touching = false;
 
-    let catDist = p5.Vector.dist(catPos, target);
-    if (catDist < 120 && !exploded) {
-      if (!explosion.isPlaying()) explosion.play();
+    if (flyingCat) {
+      let catDirection = p5.Vector.sub(target, catPos);
+      catDirection.mult(0.1);
+      catPos.add(catDirection);
 
-      exploded = true;
+      p.image(cat, catPos.x, catPos.y);
+
+      let catDist = p5.Vector.dist(catPos, target);
+      if (catDist < 120 && !exploded) {
+        if (!explosion.isPlaying()) explosion.play();
+
+        exploded = true;
+        flyingCat = false;
+        explosionStartTime = p.millis();
+      }
+    }
+
+    if (exploded) {
+      p.image(explosionGif, p.width / 2, p.height / 2, p.width, p.height);
+
+      if (p.millis() - explosionStartTime > explosionDuration) {
+        gameOver = true;
+      }
+    }
+  };
+
+  // ===== KEY PRESS =====
+  p.keyPressed = function () {
+    if (p.key === 'm' && !gameOver) {
+      meow.play();
+
+      catPos = p.createVector(p.width + 200, p.random(p.height));
       flyingCat = false;
-      explosionStartTime = millis(); // start timer
+      exploded = false;
+
+      waitingForMeow = true;
     }
-  }
 
-  // ===== EXPLOSION =====
-  if (exploded) {
-    image(explosionGif, width/2, height/2, width, height);
-
-    if (millis() - explosionStartTime > explosionDuration) {
-      gameOver = true;
+    if (p.key === 'r') {
+      resetGame();
     }
-  }
-}
+  };
 
-// ===== KEY PRESS =====
-function keyPressed() {
-  if (key === 'm' && !gameOver) {
-    meow.play();
+  function resetGame() {
+    pos = p.createVector(p.width / 2, p.height / 2);
+    catPos = p.createVector(p.width + 200, p.height / 2);
 
-    catPos = createVector(width + 200, random(height));
+    touching = false;
     flyingCat = false;
     exploded = false;
-
-    waitingForMeow = true;
+    waitingForMeow = false;
+    gameOver = false;
   }
 
-  // restart
-  if (key === 'r') {
-    resetGame();
-  }
-}
+  // audio unlock
+  p.mousePressed = function () {
+    p.userStartAudio();
+  };
 
-// ===== RESET FUNCTION =====
-function resetGame() {
-  pos = createVector(width/2, height/2);
-  catPos = createVector(width + 200, height/2);
-
-  touching = false;
-  flyingCat = false;
-  exploded = false;
-  waitingForMeow = false;
-  gameOver = false;
-}
-
-// ===== REQUIRED FOR SOUND =====
-function mousePressed() {
-  userStartAudio();
-}
+});

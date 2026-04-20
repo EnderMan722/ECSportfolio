@@ -41,38 +41,35 @@ let timerSketch = new p5((p) => {
     }
 
     display() {
-      if (this.isMouseOver()) {
-        this.buttonColor = 190;
-      } else {
-        this.buttonColor = 220;
-      }
+      this.buttonColor = this.isMouseOver() ? 190 : 220;
 
       p.fill(this.buttonColor);
       p.stroke(0);
 
-      p.rect(this.x, this.y, this.w, this.h);
+      p.ellipseMode(p.CENTER);
+      p.ellipse(this.x, this.y, this.w, this.h);
 
       p.fill(0);
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(16);
-      p.text(this.label, this.x + this.w / 2, this.y + this.h / 2);
+      p.text(this.label, this.x, this.y);
     }
 
     clicked(mx, my) {
       return (
-        mx > this.x &&
-        mx < this.x + this.w &&
-        my > this.y &&
-        my < this.y + this.h
+        mx > this.x - this.w / 2 &&
+        mx < this.x + this.w / 2 &&
+        my > this.y - this.h / 2 &&
+        my < this.y + this.h / 2
       );
     }
 
     isMouseOver() {
       return (
-        p.mouseX > this.x &&
-        p.mouseX < this.x + this.w &&
-        p.mouseY > this.y &&
-        p.mouseY < this.y + this.h
+        p.mouseX > this.x - this.w / 2 &&
+        p.mouseX < this.x + this.w / 2 &&
+        p.mouseY > this.y - this.h / 2 &&
+        p.mouseY < this.y + this.h / 2
       );
     }
   }
@@ -256,6 +253,7 @@ let timerSketch = new p5((p) => {
       stopwatchHour = 0;
       stopwatchMinute = 0;
       stopwatchSecond = 0;
+      stopwatchMilisecond = 0;
 
       countdownElapsed = 0;
       inputDigits = "";

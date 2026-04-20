@@ -12,11 +12,7 @@ class Button {
   display() {
     let p = this.p;
 
-    if (this.isMouseOver()) {
-      this.buttonColor = 190;
-    } else {
-      this.buttonColor = 220;
-    }
+    this.buttonColor = this.isMouseOver() ? 190 : 220;
 
     p.fill(this.buttonColor);
     p.stroke(0);

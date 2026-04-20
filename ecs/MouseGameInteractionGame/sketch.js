@@ -29,18 +29,18 @@ let mouseGame = new p5((p) => {
 
   // ===== SETUP =====
   p.setup = function () {
-    p.createCanvas(750, 750).parent("mouseGame");
+  p.createCanvas(750, 750).parent("mouseGame");
 
-    pos = p.createVector(p.width / 2, p.height / 2);
-    catPos = p.createVector(p.width + 200, p.height / 2);
+  pos = p.createVector(p.width / 2, p.height / 2);
+  catPos = p.createVector(p.width + 200, p.height / 2);
 
-    cheese.resize(75, 75);
-    mouseImg.resize(80, 80);
-    cat.resize(300, 300);
+  cheese.resize(75, 75);
+  mouseImg.resize(80, 80);
+  cat.resize(300, 300);
 
-    p.imageMode(p.CENTER);
-    p.textAlign(p.CENTER, p.CENTER);
-  };
+  p.imageMode(p.CENTER);
+  p.textAlign(p.CENTER, p.CENTER);
+};
 
   // ===== DRAW =====
   p.draw = function () {

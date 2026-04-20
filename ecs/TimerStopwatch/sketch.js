@@ -10,8 +10,8 @@ let timerSketch = new p5((p) => {
   let countdownInitialized = false;
   let countdownInput = true;
 
-  let lastTime;
-  let lastCountdownTime;
+  let lastTime = 0;
+  let lastCountdownTime = 0;
 
   let stopwatchElapsed = 0;
   let stopwatchHour = 0;
@@ -24,11 +24,11 @@ let timerSketch = new p5((p) => {
   let alarm;
   let alarmActive = false;
   let snoozePressed = false;
-  let lastMeowTime = 0;
+  let lastAlarmTime = 0;
 
   let btnStart, btnReset, btnPause, btnSwitchMode, btnSnooze;
 
-  // ===== BUTTON CLASS =====
+  // ================= BUTTON =================
   class Button {
     constructor(label, x, y, w, h) {
       this.label = label;
@@ -71,15 +71,14 @@ let timerSketch = new p5((p) => {
     }
   }
 
-  // ===== PRELOAD =====
+  // ================= PRELOAD =================
   p.preload = function () {
     alarm = p.loadSound("scream.mp3");
   };
 
-  // ===== SETUP =====
+  // ================= SETUP =================
   p.setup = function () {
     p.createCanvas(1000, 500).parent("timerGame");
-
     p.rectMode(p.CORNER);
 
     btnStart = new Button("Start", 300, 400, 80, 40);
@@ -92,7 +91,7 @@ let timerSketch = new p5((p) => {
     lastCountdownTime = p.millis();
   };
 
-  // ===== DRAW =====
+  // ================= DRAW =================
   p.draw = function () {
     p.background(255);
 
@@ -105,7 +104,7 @@ let timerSketch = new p5((p) => {
     handleAlarm();
   };
 
-  // ===== UPDATE STOPWATCH =====
+  // ================= STOPWATCH =================
   function updateStopwatch() {
     if (timeStart && screen === 's') {
       let now = p.millis();
@@ -124,7 +123,7 @@ let timerSketch = new p5((p) => {
     }
   }
 
-  // ===== UPDATE COUNTDOWN =====
+  // ================= COUNTDOWN =================
   function updateCountdown() {
     if (timeStart && screen === 'c') {
       let now = p.millis();
@@ -142,29 +141,32 @@ let timerSketch = new p5((p) => {
 
           alarmActive = true;
           snoozePressed = false;
-          lastMeowTime = p.millis();
+          lastAlarmTime = p.millis();
 
-          if (alarm && alarm.isLoaded()) alarm.play();
+          if (alarm && alarm.isLoaded()) {
+            alarm.play();
+          }
         }
 
         countdownMinute = p.floor(countdownElapsed / 60000);
-        let r = countdownElapsed % 60000;
-        countdownSecond = p.floor(r / 1000);
+        countdownSecond = p.floor((countdownElapsed % 60000) / 1000);
       }
     }
   }
 
-  // ===== ALARM =====
+  // ================= ALARM =================
   function handleAlarm() {
     if (alarmActive && !snoozePressed) {
-      if (p.millis() - lastMeowTime >= 2000) {
-        if (alarm && alarm.isLoaded()) alarm.play();
-        lastMeowTime = p.millis();
+      if (p.millis() - lastAlarmTime >= 2000) {
+        if (alarm && alarm.isLoaded()) {
+          alarm.play();
+        }
+        lastAlarmTime = p.millis();
       }
     }
   }
 
-  // ===== SCREENS =====
+  // ================= SCREENS =================
   function timeScreen() {
     p.textAlign(p.CENTER);
     p.textSize(60);
@@ -202,11 +204,11 @@ let timerSketch = new p5((p) => {
     p.textAlign(p.CENTER);
     p.textSize(60);
 
-    let txt = countdownInput
+    let display = countdownInput
       ? inputDigits
       : p.nf(countdownMinute, 2) + ":" + p.nf(countdownSecond, 2);
 
-    p.text(txt, p.width / 2, p.height / 2);
+    p.text(display, p.width / 2, p.height / 2);
 
     btnSwitchMode.display();
     btnStart.display();
@@ -216,7 +218,7 @@ let timerSketch = new p5((p) => {
     if (alarmActive) btnSnooze.display();
   }
 
-  // ===== INPUT =====
+  // ================= INPUT =================
   p.mousePressed = function () {
 
     if (btnStart.clicked(p.mouseX, p.mouseY)) {
@@ -225,6 +227,7 @@ let timerSketch = new p5((p) => {
 
       if (screen === 'c' && !countdownInitialized) {
         let val = p.int(inputDigits || 0);
+
         let m = p.floor(val / 100);
         let s = val % 100;
 
@@ -242,8 +245,11 @@ let timerSketch = new p5((p) => {
       timeStart = false;
 
       stopwatchElapsed = 0;
-      countdownElapsed = 0;
+      stopwatchHour = 0;
+      stopwatchMinute = 0;
+      stopwatchSecond = 0;
 
+      countdownElapsed = 0;
       inputDigits = "";
       countdownInitialized = false;
       countdownInput = true;
@@ -267,6 +273,11 @@ let timerSketch = new p5((p) => {
       snoozePressed = true;
       alarmActive = false;
     }
+  };
+
+  // unlock audio
+  p.mousePressed = function () {
+    p.userStartAudio();
   };
 
 });
